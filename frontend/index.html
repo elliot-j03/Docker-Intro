@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Simple Docker App</title>
+    </head>
+    <body>
+        <input id="input-box">
+        <button id="send-button">Send Message</button>
+
+        <h3>Messages</h3>
+
+        <ul id="list"></ul>
+        <script>
+            const path = "http://127.0.0.1:8000/send";
+            const button = document.getElementById("send-button");
+            const inputBox = document.getElementById("input-box");
+
+            button.addEventListener("click", async () => {
+                const inputValue = inputBox.value;
+                const response = await fetch(path,
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({input: inputValue})
+                    }
+                )
+
+                const data = await response.json();
+                if (response.status === 200 && data.Message !== undefined || data.Message !== null) {
+                    console.log("Message added to log.txt");
+
+                    const node = document.createElement("li");
+                    const textNode = document.createTextNode(data.Message);
+                    node.appendChild(textNode);
+                    document.getElementById("list").appendChild(node);
+                    inputBox.value = "";
+                }
+            });
+        </script>
+    </body>
+</html>
