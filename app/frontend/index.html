@@ -28,9 +28,9 @@
                 )
 
                 const data = await response.json();
-                if (response.status === 200 && data.Message !== undefined || data.Message !== null) {
-                    console.log("Message added to log.txt");
-
+                if (response.status === 200 && data.Message !== undefined && data.Message !== null 
+                    && data.Message !== ""
+                ) {
                     const node = document.createElement("li");
                     const textNode = document.createTextNode(data.Message);
                     node.appendChild(textNode);

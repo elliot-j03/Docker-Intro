@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -12,6 +13,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+async def root():
+    return FileResponse("app/frontend/index.html")
+
 
 class Message(BaseModel):
     input: str
@@ -19,9 +24,6 @@ class Message(BaseModel):
 @app.post("/send")
 async def update_list(message: Message):
     msg = message.input
-
-    with open("log.txt", "a") as file:
-        file.write(msg+"\n")
 
     return {"Message": msg}
 
